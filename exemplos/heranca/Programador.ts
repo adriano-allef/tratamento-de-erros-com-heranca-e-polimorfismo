@@ -2,9 +2,9 @@ import Funcionario from "./Funcionarios";
 
 export default class Programador extends Funcionario{
     private linguagens: string[]
-    constructor(nome: string, salario: number) {
+    constructor(nome: string, salario: number, linguagens: string[]) {
         super(nome, salario)
-        this.linguagens = []
+        this.linguagens = linguagens
     }
 
     obterLinguagem(linguagem: string) {
