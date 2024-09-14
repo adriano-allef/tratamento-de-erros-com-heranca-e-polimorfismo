@@ -1,4 +1,5 @@
 import express from 'express'
+import { BadRequestError, NotFoundError } from './erros'
 
 const app = express()
 
@@ -16,10 +17,10 @@ app.post('/usuario', (req, res) => {
 
     try{
         if(!nome){
-            throw new Error('Nome é Obrigatorio')
+            throw new BadRequestError('Nome é Obrigatorio')
         }
         if(!email){
-            throw new Error('Email é Obrigatorio')
+            throw new BadRequestError('Email é Obrigatorio')
         }
 
         usuario.push({
@@ -27,10 +28,15 @@ app.post('/usuario', (req, res) => {
             email
         })
         return res.status(201).json({ nome, email })
-    } 
-    catch(error){
-        const erroJavascript = error as Error
-        return res.status(400).json({ error: erroJavascript.message })
+        } catch(error){
+            if(error instanceof BadRequestError || error instanceof NotFoundError){
+                return res.status(400).json({ mensagem: error.message })
+            }
+        
+            return res.status(500).json({ 
+                mensagem: 'Erro interno do servior'
+            })
+
     }
 }) 
 
